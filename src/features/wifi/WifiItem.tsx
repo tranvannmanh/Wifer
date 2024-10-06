@@ -32,7 +32,7 @@ const WifiItem = (props: WifiItemProps) => {
     <Pressable
       onPress={() => onPress?.(item)}
       android_ripple={{
-        color: 'pink',
+        color: 'lightgray',
       }}
       style={[
         styles.itemContainer,
@@ -50,7 +50,7 @@ const WifiItem = (props: WifiItemProps) => {
             <Fontisto
               name="locked"
               color={connected ? '#005eeb' : 'black'}
-              size={16}
+              size={14}
             />
           )}
           <MaterialIcons

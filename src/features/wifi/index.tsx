@@ -88,7 +88,7 @@ const WifiList = (props: WiferListProps) => {
       />
       <View style={styles.container}>
         <Animated.View style={[styles.headerContainer, {elevation}]}>
-          <Text style={styles.wifiList}>tranvanmanh</Text>
+          <Text style={styles.wifiList}>tranvanmanh's wifer</Text>
           <TouchableOpacity onPress={androidReloadWifiList}>
             <MaterialCommunityIcons
               name="reload"
@@ -117,7 +117,9 @@ const WifiList = (props: WiferListProps) => {
 export default WifiList;
 
 const styles = StyleSheet.create({
-  loadingIndicator: {marginBottom: 16},
+  loadingIndicator: {
+    marginVertical: 16,
+  },
   container: {
     marginTop: 8,
     overflow: 'hidden',

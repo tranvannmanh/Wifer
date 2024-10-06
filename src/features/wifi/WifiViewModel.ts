@@ -39,6 +39,7 @@ export const useWifiViewModel = () => {
     WifiManager.setEnabled(!isWifiEnabled);
   }, [isWifiEnabled]);
   const onSelectWifi = React.useCallback((w: WifiEntry) => {
+    LayoutAnimation.configureNext(LayoutAnimation.Presets.easeInEaseOut);
     setSelectedWifi(w);
   }, []);
   const androidReloadWifiList = React.useCallback(async () => {
@@ -50,10 +51,8 @@ export const useWifiViewModel = () => {
     } catch (error) {
       console.log('FAIL TO RELOAD WIFI LIST');
     } finally {
-      setTimeout(() => {
-        LayoutAnimation.configureNext(LayoutAnimation.Presets.easeInEaseOut);
-        setLoading(false);
-      }, 100);
+      LayoutAnimation.configureNext(LayoutAnimation.Presets.easeInEaseOut);
+      setLoading(false);
     }
   }, []);
 
