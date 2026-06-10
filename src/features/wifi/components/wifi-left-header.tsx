@@ -1,13 +1,13 @@
 /* eslint-disable react-native/no-inline-styles */
 import React from 'react';
 import {StyleSheet, Text, View} from 'react-native';
-import Fontisto from 'react-native-vector-icons/Fontisto';
+import {IncognitoIcon} from '../../../assets/icon';
 
 const WiferLeftHeader = () => {
   return (
     <View style={styles.rowWithGap}>
-      <Fontisto name="wifi-logo" size={30} color="black" />
-      <Text style={styles.wifier}>W I F E R </Text>
+      <IncognitoIcon width={22} height={22} color="black" />
+      <Text style={styles.wifier}>W I F E R v2</Text>
     </View>
   );
 };

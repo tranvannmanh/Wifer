@@ -1,6 +1,6 @@
 import React from 'react';
 import WifiManager, {WifiEntry} from 'react-native-wifi-reborn';
-import { LayoutAnimation, PermissionsAndroid} from 'react-native';
+import {LayoutAnimation, PermissionsAndroid, Platform} from 'react-native';
 import {stringCompare} from '../../utils/string-helper';
 
 export const useWifiViewModel = () => {
@@ -11,15 +11,17 @@ export const useWifiViewModel = () => {
   const [wifiConnected, setWifiConnected] = React.useState<string>('');
   const wifiScan = React.useCallback(async () => {
     try {
-      const locationAccessGranted = await PermissionsAndroid.check(
-        'android.permission.ACCESS_FINE_LOCATION',
-      );
-      if (locationAccessGranted) {
-        const isEnabled = await WifiManager.isEnabled();
-        setIsWifiEnabled(isEnabled);
-        if (isEnabled) {
-          const wifiList = await WifiManager.loadWifiList();
-          setWifis(wifiList);
+      if (Platform.OS === 'android') {
+        const locationAccessGranted = await PermissionsAndroid.check(
+          'android.permission.ACCESS_FINE_LOCATION',
+        );
+        if (locationAccessGranted) {
+          const wifiEnabled = await WifiManager.isEnabled();
+          setIsWifiEnabled(wifiEnabled);
+          if (wifiEnabled) {
+            const wifiList = await WifiManager.loadWifiList();
+            setWifis(wifiList);
+          }
         }
       }
     } catch (error) {
@@ -29,14 +31,16 @@ export const useWifiViewModel = () => {
     }
   }, []);
   const getCurrentWifi = React.useCallback(async () => {
-    await WifiManager.getCurrentWifiSSID().then(ssid => setWifiConnected(ssid))
+    await WifiManager.getCurrentWifiSSID().then(ssid => setWifiConnected(ssid));
   }, []);
   React.useEffect(() => {
     wifiScan();
     getCurrentWifi();
   }, [getCurrentWifi, wifiScan]);
   const toggleWifiEnable = React.useCallback(() => {
-    WifiManager.setEnabled(!isWifiEnabled);
+    if (Platform.OS === 'android') {
+      WifiManager.setEnabled(!isWifiEnabled);
+    }
   }, [isWifiEnabled]);
   const onSelectWifi = React.useCallback((w: WifiEntry) => {
     LayoutAnimation.configureNext(LayoutAnimation.Presets.easeInEaseOut);
@@ -64,12 +68,12 @@ export const useWifiViewModel = () => {
     return !capabilities || capabilities.includes('ESS');
   }, []);
   const wifiConnectHandler = React.useCallback(
-    async (wifi: WifiEntry) => {
+    async (wifi: WifiEntry, password?: string) => {
       try {
         const isOpen = isOpenNetwork(wifi);
         await WifiManager.connectToProtectedSSID(
           wifi.SSID,
-          isOpen ? '' : 'trang1938',
+          isOpen ? '' : password || '',
           false,
           false,
         ).then(() => setWifiConnected(wifi.SSID));
@@ -79,6 +83,14 @@ export const useWifiViewModel = () => {
     },
     [isOpenNetwork],
   );
+  const disconnectWifi = React.useCallback(async () => {
+    try {
+      const disconnected = await WifiManager.disconnect();
+      setWifiConnected(prev => (disconnected ? '' : prev));
+    } catch (error) {
+      console.log('DISCONNECT WIFI FAIL');
+    }
+  }, []);
   return {
     wifis: wifis
       .reduce((list, cur) => {
@@ -99,5 +111,6 @@ export const useWifiViewModel = () => {
     toggleWifiEnable,
     isWifiEnabled,
     wifiConnected,
+    disconnectWifi,
   };
 };

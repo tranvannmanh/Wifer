@@ -10,6 +10,8 @@ import React from 'react';
 import MainStack from './src/navigation/main-stack';
 import {requestLocationPermission} from './src/permissions';
 import {Platform, UIManager} from 'react-native';
+import codePush from '@revopush/react-native-code-push';
+
 if (
   Platform.OS === 'android' &&
   UIManager.setLayoutAnimationEnabledExperimental
@@ -18,7 +20,9 @@ if (
 }
 function App(): React.JSX.Element {
   React.useEffect(() => {
-    requestLocationPermission();
+    if (Platform.OS === 'android') {
+      requestLocationPermission();
+    }
   }, []);
   return (
     <NavigationContainer>
@@ -27,4 +31,4 @@ function App(): React.JSX.Element {
   );
 }
 
-export default App;
+export default codePush(App);

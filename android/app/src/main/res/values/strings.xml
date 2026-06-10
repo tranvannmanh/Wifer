@@ -1,3 +1,5 @@
 <resources>
     <string name="app_name">Wifer</string>
+    <string moduleConfig="true" name="CodePushDeploymentKey">H9PHeGqP9VXbaR_gIiaVU1X5FRtOVkBt1QAj7e</string>
+    <string moduleConfig="true" name="CodePushServerUrl">https://api.revopush.org</string>
 </resources>

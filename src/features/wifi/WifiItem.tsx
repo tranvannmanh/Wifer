@@ -8,26 +8,30 @@ import {
 } from 'react-native';
 import React from 'react';
 import {WifiEntry} from 'react-native-wifi-reborn';
-import MaterialIcons from 'react-native-vector-icons/MaterialIcons';
 import Fontisto from 'react-native-vector-icons/Fontisto';
 import MaterialCommunityIcons from 'react-native-vector-icons/MaterialCommunityIcons';
+import {CompareHorizontalIcon, WifiStrengthIcon} from '../../assets/icon';
 
 export interface WifiItemProps {
   item: WifiEntry;
   onPress?: (wifi: WifiEntry) => void;
   isSelected?: boolean;
   connected?: boolean;
-  connectHandler?: (wifi: WifiEntry) => void;
+  connectHandler?: (wifi: WifiEntry) => Promise<void>;
+  disconnectHandler?: (wifi: WifiEntry) => Promise<void>;
   isOpenNetwork?: boolean;
 }
 const WifiItem = (props: WifiItemProps) => {
   const {item, onPress, isSelected, connectHandler, connected, isOpenNetwork} =
     props;
+  const max = -50;
+  const min = -100;
   const signalStrength = () => {
-    const percentage = (item.level + 100) / 2; // Converts range (-100 to 0) to percentage
-    const bars = Math.ceil(percentage / 20); // Convert percentage to 1-5 bars
+    const percentage = ((item.level - min) * 100) / (max - min); // Converts range (-100 to -50) to percentage
+    const bars = Math.ceil(percentage / 20) - 1; // Convert percentage to 1-5 bars
     return {percentage, bars};
   };
+  const connectedColor = connected ? '#005eeb' : 'black';
   return (
     <Pressable
       onPress={() => onPress?.(item)}
@@ -42,22 +46,18 @@ const WifiItem = (props: WifiItemProps) => {
         <Text style={[styles.ssid, connected && {color: '#005eeb'}]}>
           {item.SSID}
         </Text>
-        <View style={{flexDirection: 'row', alignItems: 'center', gap: 12}}>
+        <View style={{flexDirection: 'row', alignItems: 'flex-end', gap: 12}}>
           {connected && (
-            <Text style={connected && {color: '#005eeb'}}>connected</Text>
+            <CompareHorizontalIcon color="#005eeb" width={20} height={20} />
           )}
           {!isOpenNetwork && (
-            <Fontisto
-              name="locked"
-              color={connected ? '#005eeb' : 'black'}
-              size={14}
-            />
+            <Fontisto name="locked" color={connectedColor} size={14} />
           )}
-          <MaterialIcons
-            name={`network-wifi-${signalStrength().bars}-bar`}
-            style={{marginRight: 8}}
-            size={18}
-            color={connected ? '#005eeb' : 'black'}
+          <WifiStrengthIcon
+            strength={signalStrength().bars}
+            color={connectedColor}
+            width={18}
+            height={18}
           />
         </View>
       </View>
@@ -91,9 +91,8 @@ const styles = StyleSheet.create({
     alignItems: 'center',
     paddingVertical: 4,
     paddingHorizontal: 10,
-    borderRadius: 50,
+    borderRadius: 6,
     marginTop: 24,
-    marginRight: 8,
   },
   connectText: {
     color: 'white',
@@ -101,6 +100,7 @@ const styles = StyleSheet.create({
   row: {
     flexDirection: 'row',
     justifyContent: 'space-between',
+    alignItems: 'flex-end',
   },
   itemContainer: {
     paddingVertical: 16,
