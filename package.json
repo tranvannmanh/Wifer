@@ -46,6 +46,14 @@
     "react-test-renderer": "19.2.3",
     "typescript": "^5.8.3"
   },
+  "codegenConfig": {
+    "name": "NativeWifiManagerSpec",
+    "type": "modules",
+    "jsSrcsDir": "specs",
+    "android": {
+      "javaPackageName": "com.nativewifimanager"
+    }
+  },
   "engines": {
     "node": ">= 22.11.0"
   },

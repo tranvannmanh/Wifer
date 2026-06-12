@@ -7,10 +7,10 @@ import {
   View,
 } from 'react-native';
 import React from 'react';
-import {WifiEntry} from 'react-native-wifi-reborn';
 import Fontisto from 'react-native-vector-icons/Fontisto';
 import MaterialCommunityIcons from 'react-native-vector-icons/MaterialCommunityIcons';
 import {CompareHorizontalIcon, WifiStrengthIcon} from '../../assets/icon';
+import {WifiEntry} from 'react-native-wifi-reborn';
 
 export interface WifiItemProps {
   item: WifiEntry;

@@ -2,6 +2,7 @@ import React from 'react';
 import WifiManager, {WifiEntry} from 'react-native-wifi-reborn';
 import {LayoutAnimation, PermissionsAndroid, Platform} from 'react-native';
 import {stringCompare} from '../../utils/string-helper';
+import NativeWifiManager from '../../../specs/NativeWifiManager';
 
 export const useWifiViewModel = () => {
   const [wifis, setWifis] = React.useState<WifiEntry[]>([]);
@@ -19,6 +20,8 @@ export const useWifiViewModel = () => {
           const wifiEnabled = await WifiManager.isEnabled();
           setIsWifiEnabled(wifiEnabled);
           if (wifiEnabled) {
+            const listTurbo = await NativeWifiManager.loadWifiList();
+            console.log('LIST FORM TURBO MODULE..', listTurbo);
             const wifiList = await WifiManager.loadWifiList();
             setWifis(wifiList);
           }

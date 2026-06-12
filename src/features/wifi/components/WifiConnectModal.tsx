@@ -7,8 +7,8 @@ import {
   TouchableOpacity,
   View,
 } from 'react-native';
-import {WifiEntry} from 'react-native-wifi-reborn';
 import Fontisto from 'react-native-vector-icons/Fontisto';
+import {WifiEntry} from 'react-native-wifi-reborn';
 
 interface WifiConnectModalProps {
   wifi: WifiEntry | null;
